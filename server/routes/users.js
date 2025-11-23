@@ -50,7 +50,7 @@ router.delete("/:username/:file", function (req, res, next) {
   console.log(`Attempting to delete file: ${relativeFilePath}`);
   console.log(`From root directory: ${USERS_ROOT_DIR}`);
 
-  fs.unlink(USERS_ROOT_DIR + relativeFilePath, "utf8", (err, files) => {
+  fs.unlink(USERS_ROOT_DIR + relativeFilePath, (err, files) => {
     if (err) {
       console.log(err);
       res.send("failed to delete");

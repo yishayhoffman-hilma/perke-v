@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-
+import { useParams, Link, Outlet } from "react-router-dom";
 // import "./App.css";
 
 function UserDirectory() {
@@ -11,7 +10,7 @@ function UserDirectory() {
       const response = await fetch(`http://localhost:3000/users/${username}`);
       try {
         setFiles(await response.json());
-        console.log(files);
+        // console.log(files);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -20,34 +19,38 @@ function UserDirectory() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [username]);
 
+  async function deleteFile(file) {
+    const response = await fetch(
+      `http://localhost:3000/users/${username}/${file}`,
+      { method: "DELETE" }
+    );
+    try {
+      const jsondata = await response.text();
+      console.log(jsondata);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+
   return (
-    <div>
-      <ul>
-        {files.map((file) => (
-          <li
-          // style={{
-          //   display: "flex",
-          //   alignItems: "center",
-          //   padding: "6px 10px",
-          //   borderBottom: "1px solid #ddd",
-          // }}
-          >
-            <span style={{ marginRight: "10px", fontWeight: "bold" }}>
-              {file}
-            </span>
-            {/* <Link
-              to={`${file.id}`}
-              style={{
-                textDecoration: "none",
-                fontWeight: "bold",
-              }}
-            >
-              {file}
-            </Link> */}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <>
+      <div>
+        <ul>
+          {files.map((file, index) => (
+            <li key={index}>
+              <Link to={file}>{file}</Link>
+              <button
+                onClick={() => {
+                  deleteFile(file);
+                }}
+              >
+                delete
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </>
   );
 }
 export default UserDirectory;
