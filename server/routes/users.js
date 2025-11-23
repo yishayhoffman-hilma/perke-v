@@ -22,5 +22,25 @@ router.get("/:username", function (req, res, next) {
     }
   });
 });
+router.get("/:username/:file", function (req, res, next) {
+  const username = req.params.username;
+  const fileName = req.params.file;
+  const relativeFilePath = username + "/" + fileName;
+
+  console.log(`Attempting to serve file: ${relativeFilePath}`);
+  console.log(`From root directory: ${USERS_ROOT_DIR}`);
+
+  fs.readFile(USERS_ROOT_DIR + relativeFilePath, "utf8", (err, files) => {
+    if (err) {
+      res.send("bad path");
+      console.log(err);
+      return err;
+    } else {
+      console.log(files);
+      res.send(files);
+    }
+  });
+  // res.sendFile(USERS_ROOT_DIR + relativeFilePath);
+});
 
 module.exports = router;
