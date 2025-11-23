@@ -27,6 +27,11 @@ function UserDirectory() {
     try {
       const jsondata = await response.text();
       console.log(jsondata);
+      setFiles((prevFile) => {
+        return [...prevFile].filter((value) => {
+          return value !== file;
+        });
+      });
     } catch (error) {
       console.error("Error fetching data:", error);
     }
