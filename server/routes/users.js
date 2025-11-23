@@ -40,7 +40,26 @@ router.get("/:username/:file", function (req, res, next) {
       res.send(files);
     }
   });
-  // res.sendFile(USERS_ROOT_DIR + relativeFilePath);
+});
+
+router.delete("/:username/:file", function (req, res, next) {
+  const username = req.params.username;
+  const fileName = req.params.file;
+  const relativeFilePath = username + "/" + fileName;
+
+  console.log(`Attempting to delete file: ${relativeFilePath}`);
+  console.log(`From root directory: ${USERS_ROOT_DIR}`);
+
+  fs.unlink(USERS_ROOT_DIR + relativeFilePath, "utf8", (err, files) => {
+    if (err) {
+      console.log(err);
+      res.send("failed to delete");
+      return err;
+    } else {
+      console.log(files);
+      res.send(`successfully deleted ${USERS_ROOT_DIR + relativeFilePath}`);
+    }
+  });
 });
 
 module.exports = router;
