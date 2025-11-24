@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "../Login.css";
 
 function LoginPage() {
   const [username, setUsername] = useState("");
@@ -29,17 +30,17 @@ function LoginPage() {
       <div className="div">
         <form
           onSubmit={(e) => {
-              e.preventDefault();
-              checkUser(username, password);
-            }}
-            >
+            e.preventDefault();
+            checkUser(username, password);
+          }}
+        >
           <div>
             <input
               type="text"
               placeholder="Username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              />
+            />
           </div>
           <div>
             <input
@@ -47,11 +48,11 @@ function LoginPage() {
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              />
+            />
           </div>
           <button type="submit">Login</button>
         </form>
-              <p>{login}</p>
+        <p>{login}</p>
         <h4>New user?</h4>
         {/* <button onClick={() => navigate("/register")}>Register</button> */}
       </div>

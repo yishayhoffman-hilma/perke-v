@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, Link, Outlet } from "react-router-dom";
-// import "./App.css";
+import "../App.css";
 
 function UserDirectory() {
   const username = useParams().username;
@@ -11,7 +11,8 @@ function UserDirectory() {
     const fetchData = async () => {
       const response = await fetch(`http://localhost:3000/users/${username}`);
       try {
-        setFiles(await response.json());
+        const jsonData = await response.json();
+        setFiles(jsonData);
         // console.log(files);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -82,10 +83,35 @@ function UserDirectory() {
     }
   }
 
+  async function CopyFile(fileName) {
+    const newName = `${fileName}.copy`;
+
+    const getResponse = await fetch(
+      `http://localhost:3000/users/${username}/${fileName}`
+    );
+    const data = await getResponse.text();
+
+    const response = await fetch(`http://localhost:3000/users/${username}`, {
+      method: "POST",
+      body: JSON.stringify({ fileName: newName, content: data }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const jsondata = await response.text();
+    console.log(jsondata);
+    try {
+      setFiles((prevFile) => {
+        return [...prevFile, newName];
+      });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
   return (
     <>
-      <div>
-        <div style={{ display: "flex", flexDirection: "column" }}>
+      <div className="container">
+        <div className="input-section">
           <label htmlFor="title"></label>
           <input
             name="title"
@@ -96,6 +122,7 @@ function UserDirectory() {
               setFileTitle(e.target.value);
             }}
           />
+
           <label htmlFor="content"></label>
           <textarea
             id="content"
@@ -105,29 +132,33 @@ function UserDirectory() {
               setFileContent(e.target.value);
             }}
           />
-          <button onClick={addNewFile}>add new file</button>
+
+          <button className="add-btn" onClick={addNewFile}>
+            add new file
+          </button>
         </div>
-        <ul>
+
+        <ul className="file-list">
           {files.map((file, index) => (
-            <li key={index} style={{ textAlign: "left" }}>
-              <Link to={file}>{file}</Link>
-              <button
-                onClick={() => {
-                  deleteFile(file);
-                }}
-              >
-                delete
-              </button>
-              <button
-                onClick={() => {
-                  const newFileName = prompt(
-                    "enter the new name for your file"
-                  );
-                  renameFile(file, newFileName);
-                }}
-              >
-                rename
-              </button>
+            <li key={index} className="file-item">
+              <Link to={file} className="file-name">
+                {file}
+              </Link>
+
+              <div className="action-buttons">
+                <button onClick={() => deleteFile(file)}>delete</button>
+                <button onClick={() => CopyFile(file)}>copy</button>
+                <button
+                  onClick={() => {
+                    const newFileName = prompt(
+                      "enter the new name for your file"
+                    );
+                    renameFile(file, newFileName);
+                  }}
+                >
+                  rename
+                </button>
+              </div>
             </li>
           ))}
         </ul>

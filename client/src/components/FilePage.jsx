@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Navigate, Outlet, useNavigate, useParams } from "react-router-dom";
-// import "./App.css";
+import "../App.css";
 
 function FilePage() {
   const username = useParams().username;
@@ -28,9 +28,10 @@ function FilePage() {
 
   return (
     <>
-      <div>
+      <div className="containerFile">
         <p>{file}</p>
         <button
+          className="add-btn"
           onClick={() => {
             navigate(-1);
           }}
