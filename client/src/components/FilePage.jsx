@@ -15,7 +15,7 @@ function FilePage() {
       );
       try {
         setFile(await response.text());
-        console.log(file);
+        // console.log(file);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -23,8 +23,6 @@ function FilePage() {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [username, fileName]);
-
-  console.log("in file page");
 
   return (
     <>
