@@ -1,7 +1,3 @@
-/* * {
-  box-shadow: none !important;
-  border-radius: 0 !important;
-} */
 * {
   font-size: 20px;
 }
@@ -9,12 +5,56 @@ body {
   padding: 20px;
   font-family: Arial, sans-serif;
 }
+.navbar {
+  display: flex;
+  flex-direction: row;
+  /* width: 100vw; */
+  justify-content: space-between;
+}
 
 .container {
   /* width: 100%; */
   max-width: none;
 }
+summary {
+  list-style: none;
+}
 
+summary::-webkit-details-marker {
+  display: none;
+}
+
+.inline-popup {
+  position: relative;
+  display: inline-block;
+}
+
+.inline-popup summary {
+  cursor: pointer;
+}
+h1 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 30px;
+}
+.action-buttons,
+.input-section {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+  min-width: 100px;
+  display: none;
+}
+
+.inline-popup[open] .action-buttons {
+  display: block; /* Show when details is open */
+}
 .input-section {
   display: flex;
   flex-direction: column;
@@ -39,7 +79,8 @@ body {
   /* font-size: 100px; */
 }
 
-.add-btn {
+.add-btn,
+.addNew {
   width: fit-content;
   padding: 8px 16px;
   background: #fe91c0;
@@ -64,8 +105,8 @@ body {
   justify-content: space-between;
   padding: 12px 10px;
   border-bottom: 1px solid #e0e0e0;
-  background: none; /* לוודא שאין רקע כללי */
-  box-shadow: none; /* מנקה כל צל שנשאר בטעות */
+  background: none;
+  box-shadow: none;
 }
 
 .file-item:hover {

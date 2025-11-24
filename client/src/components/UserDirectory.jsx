@@ -8,6 +8,7 @@ function UserDirectory() {
   const [files, setFiles] = useState([]);
   const [fileTitle, setFileTitle] = useState("");
   const [fileContent, setFileContent] = useState("");
+  // const img = isFile ? "📄" : "📁";
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(`http://localhost:3000/users/${username}`);
@@ -111,54 +112,63 @@ function UserDirectory() {
   return (
     <>
       <div className="container">
-        <div className="input-section">
-          <label htmlFor="title"></label>
-          <input
-            name="title"
-            id="title"
-            type="text"
-            value={fileTitle}
-            onChange={(e) => {
-              setFileTitle(e.target.value);
-            }}
-          />
+        <nav className="navbar">
+          <p>Google Drive</p>
+          <details className="inline-popup">
+            <summary className="addNew">add new file</summary>
+            <div className="input-section">
+              <label htmlFor="title"></label>
+              <input
+                name="title"
+                id="title"
+                type="text"
+                value={fileTitle}
+                onChange={(e) => {
+                  setFileTitle(e.target.value);
+                }}
+              />
 
-          <label htmlFor="content"></label>
-          <textarea
-            id="content"
-            name="content"
-            value={fileContent}
-            onChange={(e) => {
-              setFileContent(e.target.value);
-            }}
-          />
+              <label htmlFor="content"></label>
+              <textarea
+                id="content"
+                name="content"
+                value={fileContent}
+                onChange={(e) => {
+                  setFileContent(e.target.value);
+                }}
+              />
 
-          <button className="add-btn" onClick={addNewFile}>
-            add new file
-          </button>
-        </div>
-
+              <button className="add-btn" onClick={addNewFile}>
+                add
+              </button>
+            </div>
+          </details>
+        </nav>
+        <h1>Files</h1>
         <ul className="file-list">
           {files.map((file, index) => (
             <li key={index} className="file-item">
+              {/* <span className="img">{img}</span> */}
               <Link to={file} className="file-name">
                 {file}
               </Link>
-
-              <div className="action-buttons">
-                <button onClick={() => deleteFile(file)}>delete</button>
-                <button onClick={() => CopyFile(file)}>copy</button>
-                <button
-                  onClick={() => {
-                    const newFileName = prompt(
-                      "enter the new name for your file"
-                    );
-                    renameFile(file, newFileName);
-                  }}
-                >
-                  rename
-                </button>
-              </div>
+              <details className="inline-popup">
+                <summary>...</summary>
+                <div className="action-buttons">
+                  <button onClick={() => deleteFile(file)}>delete</button>
+                  <button onClick={() => CopyFile(file)}>copy</button>
+                  <button
+                    onClick={() => {
+                      const newFileName = prompt(
+                        "enter the new name for your file"
+                      );
+                      renameFile(file, newFileName);
+                    }}
+                  >
+                    rename
+                  </button>
+                </div>
+              </details>
             </li>
           ))}
         </ul>
