@@ -87,12 +87,9 @@ router.post("/:username", function (req, res, next) {
 
 //rename
 router.put("/:username/:fileName", function (req, res, next) {
-  console.log(req.body);
-
   const username = req.params.username;
   const oldFileName = req.params.fileName;
   const newFileName = req.body.fileName;
-  console.log(newFileName);
 
   const oldPath = path.join(USERS_ROOT_DIR, username, oldFileName);
   const newPath = path.join(USERS_ROOT_DIR, username, newFileName);
