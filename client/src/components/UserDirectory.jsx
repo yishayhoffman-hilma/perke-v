@@ -1,19 +1,25 @@
 import { useEffect, useState } from "react";
-import { useParams, Link, Outlet } from "react-router-dom";
+import { useParams, Link, Outlet, useLocation } from "react-router-dom";
 import "../App.css";
 import MyLink from "./MyLink";
 
-function UserDirectory() {
+function UserDirectory({ setFile }) {
   const username = useParams().username;
   const [files, setFiles] = useState([]);
   const [fileTitle, setFileTitle] = useState("");
   const [fileContent, setFileContent] = useState("");
-  // const img = isFile ? "📄" : "📁";
+  const location = useLocation();
+
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch(`http://localhost:3000/users/${username}`);
+      const response = await fetch(
+        `http://localhost:3000/users/${location.pathname}`
+      );
       try {
         const jsonData = await response.json();
+        console.log("jsonData", jsonData);
+
+        // if (Array.isArray(jsonData)) setFile("file");
         setFiles(jsonData);
         // console.log(files);
       } catch (error) {
@@ -21,7 +27,7 @@ function UserDirectory() {
       }
     };
     fetchData();
-  }, [username]);
+  }, [username, location, setFile]);
 
   async function deleteFile(file) {
     const response = await fetch(
