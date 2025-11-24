@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, Link, Outlet } from "react-router-dom";
+import MyLink from "./MyLink";
 // import "./App.css";
 
 function UserDirectory() {
@@ -18,7 +19,6 @@ function UserDirectory() {
       }
     };
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [username]);
 
   async function deleteFile(file) {
@@ -109,26 +109,13 @@ function UserDirectory() {
         </div>
         <ul>
           {files.map((file, index) => (
-            <li key={index} style={{ textAlign: "left" }}>
-              <Link to={file}>{file}</Link>
-              <button
-                onClick={() => {
-                  deleteFile(file);
-                }}
-              >
-                delete
-              </button>
-              <button
-                onClick={() => {
-                  const newFileName = prompt(
-                    "enter the new name for your file"
-                  );
-                  renameFile(file, newFileName);
-                }}
-              >
-                rename
-              </button>
-            </li>
+            <MyLink
+              key={index}
+              file={file}
+              index={index}
+              deleteFile={deleteFile}
+              renameFile={renameFile}
+            />
           ))}
         </ul>
       </div>

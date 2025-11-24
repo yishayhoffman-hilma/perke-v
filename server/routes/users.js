@@ -4,7 +4,7 @@ const path = require("path");
 const fs = require("fs");
 
 const USERS_ROOT_DIR = path.join(__dirname, "../users/");
-/* GET users listing. */
+
 router.get("/:username", function (req, res, next) {
   const username = req.params.username;
   const relativeFilePath = username;
@@ -28,17 +28,28 @@ router.get("/:username/:file", function (req, res, next) {
   const fileName = req.params.file;
   const relativeFilePath = username + "/" + fileName;
 
+  const pathToUse = USERS_ROOT_DIR + relativeFilePath;
   console.log(`Attempting to serve file: ${relativeFilePath}`);
   console.log(`From root directory: ${USERS_ROOT_DIR}`);
 
-  fs.readFile(USERS_ROOT_DIR + relativeFilePath, "utf8", (err, files) => {
+  fs.stat(pathToUse, (err, stats) => {
     if (err) {
-      res.send("bad path");
-      console.log(err);
-      return err;
+      if (err.code === "ENOENT") {
+        console.log(`Path does not exist: ${pathToUse}`);
+      } else {
+        console.error(`Error checking path: ${err.message}`);
+      }
+      return;
+    }
+
+    if (stats.isFile()) {
+      myReadFile(pathToUse, res);
+    } else if (stats.isDirectory()) {
+      myReadDir(pathToUse, res);
     } else {
-      console.log(files);
-      res.send(files);
+      console.log(
+        `${pathToUse} is neither a file nor a directory (e.g., a symbolic link, device, etc.).`
+      );
     }
   });
 });
@@ -104,5 +115,28 @@ router.put("/:username/:fileName", function (req, res, next) {
   });
 });
 
+function myReadFile(myPath, res) {
+  fs.readFile(myPath, "utf8", (err, files) => {
+    if (err) {
+      res.send("bad path");
+      console.log(err);
+      return err;
+    } else {
+      console.log(files);
+      res.send(files);
+    }
+  });
+}
 
+function myReadDir(myPath, res) {
+  fs.readdir(myPath, (err, files) => {
+    if (err) {
+      res.send("bad path");
+      console.log(err);
+      return err;
+    } else {
+      res.json(files);
+    }
+  });
+}
 module.exports = router;
