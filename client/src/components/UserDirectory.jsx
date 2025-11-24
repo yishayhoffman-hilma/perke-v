@@ -140,7 +140,6 @@ function UserDirectory() {
 
         <ul className="file-list">
           {files.map((file, index) => (
-<<<<<<< HEAD
             <li key={index} className="file-item">
               <Link to={file} className="file-name">
                 {file}
@@ -161,15 +160,6 @@ function UserDirectory() {
                 </button>
               </div>
             </li>
-=======
-            <MyLink
-              key={index}
-              file={file}
-              index={index}
-              deleteFile={deleteFile}
-              renameFile={renameFile}
-            />
->>>>>>> 589392774f160f7b6da892d7c5ec5b0fb2b4172e
           ))}
         </ul>
       </div>

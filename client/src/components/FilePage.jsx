@@ -32,28 +32,12 @@ function FilePage() {
   } catch (error) {
     console.log(error);
 
-<<<<<<< HEAD
-  return (
-    <>
-      <div className="containerFile">
-        <p>{file}</p>
-        <button
-          className="add-btn"
-          onClick={() => {
-            navigate(-1);
-          }}
-        >
-          go back
-        </button>
-      </div>
-    </>
-  );
-=======
     return (
       <>
-        <div>
+        <div className="containerFile">
           <p>{file}</p>
           <button
+            className="add-btn"
             onClick={() => {
               navigate(-1);
             }}
@@ -64,6 +48,5 @@ function FilePage() {
       </>
     );
   }
->>>>>>> 589392774f160f7b6da892d7c5ec5b0fb2b4172e
 }
 export default FilePage;
