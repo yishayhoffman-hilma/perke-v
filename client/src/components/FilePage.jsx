@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
-import { Navigate, Outlet, useNavigate, useParams } from "react-router-dom";
+import {
+  Navigate,
+  Outlet,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import "../App.css";
 
 function FilePage() {
@@ -7,11 +13,13 @@ function FilePage() {
   const fileName = useParams().filename;
   const [file, setFile] = useState("");
   let navigate = useNavigate();
+  const location = useLocation();
+  console.log(location.pathname);
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(
-        `http://localhost:3000/users/${username}/${fileName}`
+        `http://localhost:3000/users/${location.pathname}`
       );
       try {
         setFile(await response.text());
@@ -20,7 +28,7 @@ function FilePage() {
       }
     };
     fetchData();
-  }, [username, fileName]);
+  }, [username, fileName, location]);
 
   try {
     if (JSON.parse(file)) {
@@ -31,22 +39,22 @@ function FilePage() {
     }
   } catch (error) {
     console.log(error);
-
-    return (
-      <>
-        <div className="containerFile">
-          <p>{file}</p>
-          <button
-            className="add-btn"
-            onClick={() => {
-              navigate(-1);
-            }}
-          >
-            go back
-          </button>
-        </div>
-      </>
-    );
   }
+  return (
+    <>
+      <div className="containerFile">
+        <p>{file.files}</p>
+        <button
+          className="add-btn"
+          onClick={() => {
+            navigate(-1);
+          }}
+        >
+          go back
+        </button>
+      </div>
+    </>
+  );
 }
+
 export default FilePage;

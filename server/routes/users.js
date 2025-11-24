@@ -23,13 +23,13 @@ router.get("/:username", function (req, res, next) {
   });
 });
 
-router.get("/:username/:file", function (req, res, next) {
-  const username = req.params.username;
-  const fileName = req.params.file;
-  const relativeFilePath = username + "/" + fileName;
+router.get("/:username/*", function (req, res, next) {
+  const relativePath = req.path;
 
-  const pathToUse = USERS_ROOT_DIR + relativeFilePath;
-  console.log(`Attempting to serve file: ${relativeFilePath}`);
+  const pathToUse = path.join(USERS_ROOT_DIR, relativePath);
+  console.log(pathToUse);
+
+  console.log(`Attempting to serve file: ${relativePath}`);
   console.log(`From root directory: ${USERS_ROOT_DIR}`);
 
   fs.stat(pathToUse, (err, stats) => {
@@ -143,7 +143,7 @@ function myReadFile(myPath, res) {
       return err;
     } else {
       console.log(files);
-      res.send(files);
+      res.send({ files });
     }
   });
 }
