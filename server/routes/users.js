@@ -89,7 +89,7 @@ router.put("/:username/:fileName", function (req, res, next) {
   const oldPath = path.join(USERS_ROOT_DIR, username, oldFileName);
   const newPath = path.join(USERS_ROOT_DIR, username, newFileName);
 
-fs.rename(oldPath, newPath, (err) => {
+fs.copyFile(oldPath, newPath, (err) => {
   if (err) {
     console.log(err);
     return res.send("failed to rename file");
@@ -97,4 +97,6 @@ fs.rename(oldPath, newPath, (err) => {
   res.send(`successfully renamed to ${newFileName}`);
 });
 });
+
+
 module.exports = router;

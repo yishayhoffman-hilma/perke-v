@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import UserDirectory from "./components/UserDirectory";
 import FilePage from "./components/FilePage";
+import LoginPage from "./components/LoginPage";
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
       <Routes>
         <Route path="/:username" element={<UserDirectory />}></Route>
         <Route path="/:username/:filename" element={<FilePage />} />
+        <Route path="/login" element={<LoginPage />} />
       </Routes>
     </BrowserRouter>
   );
