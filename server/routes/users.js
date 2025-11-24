@@ -22,6 +22,7 @@ router.get("/:username", function (req, res, next) {
     }
   });
 });
+
 router.get("/:username/:file", function (req, res, next) {
   const username = req.params.username;
   const fileName = req.params.file;
@@ -66,6 +67,9 @@ router.post("/:username", function (req, res, next) {
   const username = req.params.username;
   const content = req.body.content;
   const fileName = req.body.fileName;
+
+  console.log(req.body);
+
   let relativeFilePath = username + "/" + fileName;
   console.log(`Attempting to post file: ${relativeFilePath}`);
   console.log(`To root directory: ${USERS_ROOT_DIR}`);

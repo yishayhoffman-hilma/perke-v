@@ -5,6 +5,8 @@ import { useParams, Link, Outlet } from "react-router-dom";
 function UserDirectory() {
   const username = useParams().username;
   const [files, setFiles] = useState([]);
+  const [fileTitle, setFileTitle] = useState("");
+  const [fileContent, setFileContent] = useState("");
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(`http://localhost:3000/users/${username}`);
@@ -36,11 +38,8 @@ function UserDirectory() {
       console.error("Error fetching data:", error);
     }
   }
-  async function renameFile(file, newFileName) {
-    console.log(newFileName);
-    console.log(username);
-    console.log({ method: "PUT", body: { fileName: newFileName } });
 
+  async function renameFile(file, newFileName) {
     const response = await fetch(
       `http://localhost:3000/users/${username}/${file}`,
       {
@@ -64,9 +63,50 @@ function UserDirectory() {
     }
   }
 
+  async function addNewFile() {
+    const response = await fetch(`http://localhost:3000/users/${username}`, {
+      method: "POST",
+      body: JSON.stringify({ fileName: fileTitle, content: fileContent }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const jsondata = await response.text();
+    console.log(jsondata);
+    try {
+      setFiles((prevFile) => {
+        return [...prevFile, fileTitle];
+      });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+
   return (
     <>
       <div>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <label htmlFor="title"></label>
+          <input
+            name="title"
+            id="title"
+            type="text"
+            value={fileTitle}
+            onChange={(e) => {
+              setFileTitle(e.target.value);
+            }}
+          />
+          <label htmlFor="content"></label>
+          <textarea
+            id="content"
+            name="content"
+            value={fileContent}
+            onChange={(e) => {
+              setFileContent(e.target.value);
+            }}
+          />
+          <button onClick={addNewFile}>add new file</button>
+        </div>
         <ul>
           {files.map((file, index) => (
             <li key={index} style={{ textAlign: "left" }}>
