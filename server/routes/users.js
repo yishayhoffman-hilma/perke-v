@@ -65,37 +65,42 @@ router.delete("/:username/:file", function (req, res, next) {
 router.post("/:username", function (req, res, next) {
   const username = req.params.username;
   const content = req.body.content;
-  const fileName= req.body.fileName;
-  let relativeFilePath = username+"/"+fileName ;
+  const fileName = req.body.fileName;
+  let relativeFilePath = username + "/" + fileName;
   console.log(`Attempting to post file: ${relativeFilePath}`);
   console.log(`To root directory: ${USERS_ROOT_DIR}`);
-  
-    fs.writeFile(USERS_ROOT_DIR + relativeFilePath, content, (err)=>{
-    if (err){      
+
+  fs.writeFile(USERS_ROOT_DIR + relativeFilePath, content, (err) => {
+    if (err) {
       console.log(err);
       res.send("failed to create content");
       return err;
-    }else{
-      res.send(`successfully post ${USERS_ROOT_DIR + relativeFilePath}`);      
+    } else {
+      res.send(`successfully post ${USERS_ROOT_DIR + relativeFilePath}`);
     }
-    });
+  });
 });
 
-
+//rename
 router.put("/:username/:fileName", function (req, res, next) {
+  console.log(req.body);
+
   const username = req.params.username;
-  const oldFileName =req.params.fileName;
+  const oldFileName = req.params.fileName;
   const newFileName = req.body.fileName;
+  console.log(newFileName);
+
   const oldPath = path.join(USERS_ROOT_DIR, username, oldFileName);
   const newPath = path.join(USERS_ROOT_DIR, username, newFileName);
 
-fs.copyFile(oldPath, newPath, (err) => {
-  if (err) {
-    console.log(err);
-    return res.send("failed to rename file");
-  }
-  res.send(`successfully renamed to ${newFileName}`);
-});
+  fs.rename(oldPath, newPath, (err) => {
+    if (err) {
+      console.log(err);
+      res.send("failed to rename file");
+      return;
+    }
+    res.send(`successfully renamed to ${newFileName}`);
+  });
 });
 
 

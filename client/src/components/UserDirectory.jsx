@@ -27,6 +27,38 @@ function UserDirectory() {
     try {
       const jsondata = await response.text();
       console.log(jsondata);
+      setFiles((prevFile) => {
+        return [...prevFile].filter((value) => {
+          return value !== file;
+        });
+      });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+  async function renameFile(file, newFileName) {
+    console.log(newFileName);
+    console.log(username);
+    console.log({ method: "PUT", body: { fileName: newFileName } });
+
+    const response = await fetch(
+      `http://localhost:3000/users/${username}/${file}`,
+      {
+        method: "PUT",
+        body: JSON.stringify({ fileName: newFileName }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const jsondata = await response.text();
+    console.log(jsondata);
+    try {
+      setFiles((prevFile) => {
+        return [...prevFile, newFileName].filter((value) => {
+          return value !== file;
+        });
+      });
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -37,7 +69,7 @@ function UserDirectory() {
       <div>
         <ul>
           {files.map((file, index) => (
-            <li key={index}>
+            <li key={index} style={{ textAlign: "left" }}>
               <Link to={file}>{file}</Link>
               <button
                 onClick={() => {
@@ -45,6 +77,16 @@ function UserDirectory() {
                 }}
               >
                 delete
+              </button>
+              <button
+                onClick={() => {
+                  const newFileName = prompt(
+                    "enter the new name for your file"
+                  );
+                  renameFile(file, newFileName);
+                }}
+              >
+                rename
               </button>
             </li>
           ))}
