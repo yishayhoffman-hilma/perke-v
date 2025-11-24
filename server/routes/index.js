@@ -5,7 +5,7 @@ const fs = require("fs");
 
 const ROOT = path.join(__dirname, "../db.json");
 
-router.get("/:username", function (req, res, next) {
+router.get("/:username/", function (req, res, next) {
   const username = req.params.username;
   const relativeFilePath = username;
 
@@ -29,21 +29,27 @@ router.get("/:username", function (req, res, next) {
   });
 });
 
-router.post("/login", function (req, res, next) {
-  const { username, password } = req.body;
+router.post("/login/:username", function (req, res, next) {
+  const password = req.body.password;
+  const username = req.params.username;
   fs.readFile(ROOT, "utf8", (err, data) => {
     if (err) {
-      res.send("bad path");
       console.log(err);
+      res.status(400);
+      res.send("bad path");
       return err;
     } else {
       db = JSON.parse(data);
       const user = db.users.find((users) => users.username === username);
+      if (!user) {
+        return res.status(404).send("user-not-found");
+      }
+
       if (user) {
         if (password === user.password) {
-          return true;
+          return res.status(200).send("login-successful");
         }
-        return false;
+        return res.status(400).send("login-failed");
       }
     }
   });
